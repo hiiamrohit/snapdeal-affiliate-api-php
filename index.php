@@ -2,7 +2,7 @@
 
 include_once("snapdealApiClass.php");
 
-// Get affiliateID and token from https://affiliate.snapdeal.com/
+// Get affiliateID and token from https://affiliate.snapdeal.com
 // Set snapdeal affiliateID and token
 $affiliateID = 'YOUR_AFFILIATE_ID';
 $token = 'YOUR_TOKEN';
@@ -138,7 +138,15 @@ $sdObj = new snapdealApi($affiliateID, $token);
 
 <div class="container">
 <h1 style="text-align:center">Snapdeal Affiliate API DEMO <br/>
-(All Categories)</h1>
+<?php if(isset($_GET['category'])) { ?>
+<a href="index.php">(All Categories)</a>
+<br/>
+<?= strtoupper(str_replace("_", " ",$_GET['category'])) ?>
+<?php } else { ?>
+(All Categories)
+<?php } ?>
+
+</h1>
     
 <?php if(isset($_GET['category']) && isset($_GET['url'])) { ?>
 <div id="products" class="row list-group">
@@ -146,12 +154,34 @@ $sdObj = new snapdealApi($affiliateID, $token);
     <?php 
 
 // snapdeal product feed url
-echo $url =  base64_decode($_GET['url']);
+$url =  base64_decode($_GET['url']);
 
 $result = snapdealApi::getData($url, 'json');
-echo "<pre>";
-var_dump($result);
-    ?>
+  foreach($result['products'] as $resultSet) { 
+  
+
+?>
+        <div class="item col-sm-6 col-md-3" style="height:400px;">
+            <div class="thumbnail" >
+                <img class="group list-group-image" src="<?= $resultSet['imageLink']; ?>" alt="" style="height:200px; width:200px;" />
+                <div class="caption">
+                    <h4 class="group inner list-group-item-heading">
+                        <?= $resultSet['title']; ?></h4>
+                 
+                    <p class="group inner list-group-item-text" style="color:red">
+                        <b><?= $resultSet['availability']; ?></b></p>
+                        <p style="color:green"><b>Offer Price: Rs. <?= $resultSet['offerPrice'] ?></b></p>
+                    <div class="row">
+                       
+                        <div class="col-xs-12 col-md-12">
+                            <a class="btn btn-lg btn-success deal" target="_blank" style="width:100%" rel="nofollow, noindex" href="<?= $resultSet['link']; ?>"><b>VIEW ON SNAPDEAL</b></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<?php   } ?>
+   
     </div>
 
 <?php } else { 

@@ -42,7 +42,7 @@
 	        $headers = array(
 	            'Accept:application/'.$dataType,
 	            'Snapdeal-Affiliate-Id: '.self::$affiliateID,
-	            'Snapdeal-Token-Id:: '.self::$token
+	            'Snapdeal-Token-Id: '.self::$token
 	            );
 
 	        $cObj = curl_init();
